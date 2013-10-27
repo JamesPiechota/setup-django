@@ -1,0 +1,18 @@
+export DEBUG=True
+export TEMPLATE_DEBUG=DEBUG
+    
+export DJANGO_PROJECT={{project}}
+export DATABASE_URL='postgres://127.0.0.1/{{project}}?user={{db_user}}&password={{local_db_password}}'
+    
+# Make this unique, and don't share it with anybody.
+export SECRET_KEY='{{secret}}'
+    
+# Email
+export EMAIL_HOST='smtp.mandrillapp.com'
+export EMAIL_PORT='587'
+export EMAIL_HOST_USER='{{mandrill_user}}'
+export EMAIL_HOST_PASSWORD='{{mandrill_password}}'
+export EMAIL_USE_TLS=True
+    
+# Redis
+export REDISTOGO_URL='redis://localhost:6379/0'
