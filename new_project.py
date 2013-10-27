@@ -77,6 +77,7 @@ def install_packages(script, config):
     script.add("pip install dj-database-url")
     script.add("pip install django-celery")
     script.add("pip install Scrapy")
+    script.add("pip install -U celery-with-redis")
         
 def initialize_project(script, config):
     script.add_section("Create django project and local git repo")
@@ -120,11 +121,16 @@ def initialize_scrapy(script, config):
     
 def initialize_celery(script, config):
     script.add_section("Initialize Celery") 
+    script.add("brew install redis")
     script.add("python manage.py migrate djcelery")
+    script.add_template("celery/tasks.py", ".", replace=config)
     
     
 if __name__ == '__main__':
     script = ShellScript("setup.log")
+    
+    print "This script assumes you have a psql server installed and running"
+    print "Type 'redis-server &' to run the installed redis server"
     
     config = {}
     config["project"] = "blockboard"

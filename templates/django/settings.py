@@ -1,6 +1,7 @@
 import os
 from os.path import abspath, dirname, basename, join
 import djcelery
+from datetime import timedelta
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
@@ -176,3 +177,9 @@ BROKER_URL = os.environ['REDISTOGO_URL']
 CELERY_RESULT_BACKEND = os.environ['REDISTOGO_URL']
 CELERY_TIMEZONE = 'US/Pacific'
 CELERYD_MAX_TASKS_PER_CHILD = 1
+CELERYBEAT_SCHEDULE = {
+    'doit-every-30-seconds': {
+        'task': 'tasks.do_it',
+        'schedule': timedelta(seconds=30),
+    },
+}
