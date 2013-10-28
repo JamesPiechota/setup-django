@@ -139,7 +139,7 @@ def initialize_heroku(script, config):
     script.add_section("Initialize Heroku")
     script.add("heroku apps:create %s" % config["heroku_web_app"])
     
-    script.add("heroku addons:add heroku-postgresql --app %s" % config["heroku_web_app"])
+    script.add("heroku addons:add %s --app %s" % (config["db_size"], config["heroku_web_app"]))
     script.add("pginfo=`heroku pg:info --app %s`" % config["heroku_web_app"], redirect=False, echo=False)
     script.add("db=`echo $pginfo | sed 's/=== \([A-Z_]*\).*/\\1/'`", redirect=False, echo=False)
     script.add("db_path=`heroku config:get $db --app %s`" % config["heroku_web_app"], redirect=False, echo=False)
@@ -198,6 +198,11 @@ def prompt_for_heroku_app(config):
     while heroku_app_exists(config["heroku_worker_app"]):
         config["heroku_worker_app"] = "%s-worker%s" % (config["heroku_web_app"], i)
         i += 1
+        
+    upgrade_db = raw_input("Would you like to upgrade your Postgres to 'basic'? (y/n) [n] ")
+    config["db_size"] = "heroku-postgresql"
+    if upgrade_db == "y":
+        config["db_size"] = "heroku-postgresql:basic"
     
 def secret_key():
     return ''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
