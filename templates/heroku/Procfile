@@ -1,0 +1,2 @@
+web: newrelic-admin run-program gunicorn {{project}}.wsgi
+worker: newrelic-admin run-program python manage.py celery -A tasks worker -B --loglevel=info
